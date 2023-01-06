@@ -1,15 +1,16 @@
 import './style.css';
 
 const makeButton = ({ content, id }: { content: string; id: string }) => {
-  return `<button class="rounded-md px-4 py-2 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-50" id="${id}">${content}</button>`;
+  const button = document.createElement('button');
+  button.className =
+    'rounded-md px-4 py-2 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-50';
+  button.id = id;
+  button.innerHTML = content;
+  return button;
 };
 
-const appendResult = (content: string) => {
-  document.querySelector('#result')!.innerHTML += content;
-};
-
-const writeLine = () => {
-  appendResult('\n\n---------------------------------\n\n');
+const setResult = (content: string) => {
+  document.querySelector('#result')!.innerHTML = content;
 };
 
 const doFetch = ({
@@ -21,20 +22,16 @@ const doFetch = ({
   method: string;
   button: HTMLButtonElement;
 }) => {
-  appendResult(`${method} ${apiEndpoint}\n`);
   button.disabled = true;
+  setResult('');
+
   fetch(apiEndpoint, { method })
     .then((response) => response.json())
     .then((data) => {
-      appendResult('\n');
-      appendResult(JSON.stringify(data, null, 2));
-      writeLine();
+      setResult(JSON.stringify(data, null, 2));
     })
     .catch((err: any) => {
-      console.log(err);
-      appendResult('\n');
-      appendResult(err);
-      writeLine();
+      setResult(err);
     })
     .finally(() => {
       button.disabled = false;
@@ -43,19 +40,24 @@ const doFetch = ({
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="container max-w-7xl px-2 py-4 mx-auto">
-    <div class="flex space-x-2">
-      ${makeButton({ content: 'GET /api/users', id: 'fetchUsers' })}
-      ${makeButton({ content: 'POST /api/test', id: 'fetchTest' })}
-    </div>
+    <div class="flex space-x-2" id="buttons"></div>
     <pre id="result" class="rounded-md px-4 py-2 mt-4 bg-gray-100 border-gray-400 border text-gray-600"></pre>
   </div>
 `;
 
 [
-  { selector: '#fetchUsers', apiEndpoint: '/api/users', method: 'GET' },
-  { selector: '#fetchTest', apiEndpoint: '/api/test', method: 'POST' },
-].forEach(({ selector, method, apiEndpoint }) => {
-  document.querySelector(selector)!.addEventListener('click', (event) => {
+  { apiEndpoint: '/api/users', method: 'GET' },
+  { apiEndpoint: '/api/test', method: 'POST' },
+].forEach(({ method, apiEndpoint }, idx) => {
+  const id = `button${idx}`;
+  document.querySelector('#buttons')!.append(
+    makeButton({
+      content: `${method} ${apiEndpoint}`,
+      id,
+    }),
+  );
+
+  document.querySelector(`#${id}`)!.addEventListener('click', (event) => {
     doFetch({
       apiEndpoint,
       method,

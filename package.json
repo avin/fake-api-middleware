@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "DEBUG=vite:plugin-mock-dev-server vite example --config ./example/vite.config.ts",
+    "dev": "tsup --watch",
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {

@@ -1,1 +1,1 @@
-console.log('it works');
+export * from './vitePlugin/index';
