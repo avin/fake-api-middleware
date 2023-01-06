@@ -1,7 +1,7 @@
 {
   "name": "fake-response",
   "version": "0.0.1",
-  "description": "",
+  "description": "Mock proxy server",
   "keywords": [
     "mock",
     "mock-server",
@@ -49,5 +49,8 @@
       "esm",
       "cjs"
     ]
+  },
+  "dependencies": {
+    "typescript": "^4.9.4"
   }
 }
