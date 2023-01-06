@@ -7,9 +7,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://jsonplaceholder.typicode.com',
+        // target: 'http://jsonplaceholder.typicode.com',
+        target: 'https://localhost:5000',
         changeOrigin: true,
-        selfHandleResponse: true,
+        // selfHandleResponse: true,
+        secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy, options) => {
           proxy.on('proxyReq', (proxyReq, req, res, options) => {
@@ -22,22 +24,22 @@ export default defineConfig({
             }
           });
 
-          proxy.on('proxyRes', function (proxyRes, req, res) {
-            console.log('FIRE!');
-            let originalBody = new Buffer('');
-            proxyRes.on('data', function (data) {
-              originalBody = Buffer.concat([originalBody, data]);
-            });
-            proxyRes.on('end', function () {
-              const bodyString = zlib.gunzipSync(originalBody).toString('utf8');
-              res.end(
-                JSON.stringify({
-                  author: 'avin',
-                  bodyString,
-                }),
-              );
-            });
-          });
+          // proxy.on('proxyRes', function (proxyRes, req, res) {
+          //   console.log('FIRE!');
+          //   let originalBody = new Buffer('');
+          //   proxyRes.on('data', function (data) {
+          //     originalBody = Buffer.concat([originalBody, data]);
+          //   });
+          //   proxyRes.on('end', function () {
+          //     const bodyString = zlib.gunzipSync(originalBody).toString('utf8');
+          //     res.end(
+          //       JSON.stringify({
+          //         author: 'avin',
+          //         bodyString,
+          //       }),
+          //     );
+          //   });
+          // });
         },
       },
     },
