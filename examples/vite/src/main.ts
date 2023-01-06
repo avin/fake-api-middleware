@@ -8,15 +8,9 @@ const appendResult = (content: string) => {
   document.querySelector('#result')!.innerHTML += content;
 };
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div class="container max-w-7xl px-2 py-4 mx-auto">
-    <div class="flex space-x-2">
-      ${makeButton({ content: 'GET /api/users', id: 'fetchUsers' })}
-      ${makeButton({ content: 'POST /api/test', id: 'fetchTest' })}
-    </div>
-    <pre id="result" class="rounded-md px-4 py-2 mt-8 bg-gray-100 border-gray-400 border text-gray-600"></pre>
-  </div>
-`;
+const writeLine = () => {
+  appendResult('\n\n---------------------------------\n\n');
+};
 
 const doFetch = ({
   apiEndpoint,
@@ -27,9 +21,6 @@ const doFetch = ({
   method: string;
   button: HTMLButtonElement;
 }) => {
-  const writeLine = () => {
-    appendResult('\n\n---------------------------------\n\n');
-  };
   appendResult(`${method} ${apiEndpoint}\n`);
   button.disabled = true;
   fetch(apiEndpoint, { method })
@@ -50,18 +41,25 @@ const doFetch = ({
     });
 };
 
-document.querySelector('#fetchUsers')!.addEventListener('click', (event) => {
-  doFetch({
-    apiEndpoint: '/api/users',
-    method: 'GET',
-    button: event.target as HTMLButtonElement,
-  });
-});
+document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+  <div class="container max-w-7xl px-2 py-4 mx-auto">
+    <div class="flex space-x-2">
+      ${makeButton({ content: 'GET /api/users', id: 'fetchUsers' })}
+      ${makeButton({ content: 'POST /api/test', id: 'fetchTest' })}
+    </div>
+    <pre id="result" class="rounded-md px-4 py-2 mt-4 bg-gray-100 border-gray-400 border text-gray-600"></pre>
+  </div>
+`;
 
-document.querySelector('#fetchTest')!.addEventListener('click', (event) => {
-  doFetch({
-    apiEndpoint: '/api/test',
-    method: 'POST',
-    button: event.target as HTMLButtonElement,
+[
+  { selector: '#fetchUsers', apiEndpoint: '/api/users', method: 'GET' },
+  { selector: '#fetchTest', apiEndpoint: '/api/test', method: 'POST' },
+].forEach(({ selector, method, apiEndpoint }) => {
+  document.querySelector(selector)!.addEventListener('click', (event) => {
+    doFetch({
+      apiEndpoint,
+      method,
+      button: event.target as HTMLButtonElement,
+    });
   });
 });
