@@ -5,8 +5,8 @@ import { vitePlugin as fakeResponseVitePlugin } from '../../dist/index';
 export default defineConfig({
   plugins: [
     fakeResponseVitePlugin({
-      mocksFile: './mocks/index.ts',
-      watchFiles: ['./mocks/*'],
+      responsesFile: './fakeApiResponses/index.ts',
+      watchFiles: ['./fakeApiResponses/*'],
     }),
   ],
   server: {

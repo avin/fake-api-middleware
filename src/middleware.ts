@@ -1,9 +1,10 @@
 import { IncomingMessage, ServerResponse } from 'node:http';
 import * as querystring from 'node:querystring';
 import bodyParse from 'co-body';
+import { ResponsesLoader } from './responsesLoader';
 
 export interface MiddlewareOptions {
-  mocksFile: string;
+  responsesFile: string;
   watchFiles?: string[];
   responseDelay?: number;
 }
@@ -16,45 +17,27 @@ export interface ResponseFunctionParams {
   res: ServerResponse;
 }
 
-const mocks: Record<
-  string,
-  Record<string, any> | ((options: ResponseFunctionParams) => any)
-> = {
-  'POST /fake-api/test-simple': {
-    success: true,
-    resultData: 'It is simple response defined as object',
-  },
-  'POST /fake-api/test-simple-func': ({ body, query, headers, req, res }) => {
-    return {
-      success: true,
-      additional: {
-        body,
-        query,
-        headers,
-      },
-      resultData: 'It is response made as simple return',
-    };
-  },
-  'POST /fake-api/test-raw-func': ({ body, query, headers, req, res }) => {
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'application/json');
-    return res.end(
-      JSON.stringify({
-        success: true,
-        additional: {
-          body,
-          query,
-          headers,
-        },
-        resultData: 'It is response made with ServerResponse',
-      }),
-    );
-  },
-};
+export const middleware = (middlewareOptions: MiddlewareOptions) => {
+  let responses = {};
 
-export const middleware = (middlewareOptions) => {
+  const responsesConfigLoader = new ResponsesLoader({
+    responsesFile: middlewareOptions.responsesFile,
+    watchFiles: middlewareOptions.watchFiles,
+  });
+  let wasErrorLastTime = false;
+  responsesConfigLoader.on('update', (newResponses) => {
+    responses = newResponses;
+    if (wasErrorLastTime) {
+      console.info('[FakeResponses]', 'Responses successfully loaded');
+    }
+  });
+  responsesConfigLoader.on('error', (err) => {
+    console.error('[FakeResponses]', err);
+    wasErrorLastTime = true;
+  });
+
   return async (req, res, next) => {
-    for (const [key, response] of Object.entries(mocks)) {
+    for (const [key, response] of Object.entries(responses)) {
       const [method, apiPath] = key.split(' ');
 
       const [url, queryStr] = req.url.split('?');
