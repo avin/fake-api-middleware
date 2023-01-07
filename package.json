@@ -24,6 +24,9 @@
       "import": "./dist/index.js"
     }
   },
+  "bin": {
+    "fake-response": "./dist/cli.js"
+  },
   "files": [
     "dist"
   ],
@@ -39,7 +42,8 @@
   },
   "tsup": {
     "entry": [
-      "src/index.ts"
+      "src/index.ts",
+      "src/cli.ts"
     ],
     "sourcemap": false,
     "dts": {
