@@ -1,1 +1,2 @@
-export * from './vitePlugin/index';
+export * from './middleware';
+export * from './vitePlugin';
