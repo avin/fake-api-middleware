@@ -43,7 +43,16 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
       const [url, queryStr] = req.url.split('?');
 
       if (url === apiPath && req.method === method) {
-        const body = await bodyParse(req);
+        if (middlewareOptions.responseDelay) {
+          await new Promise((r) =>
+            setTimeout(r, middlewareOptions.responseDelay),
+          );
+        }
+
+        let body = {};
+        try {
+          body = await bodyParse(req);
+        } catch {}
 
         if (typeof response === 'function') {
           const responseResult = await response({

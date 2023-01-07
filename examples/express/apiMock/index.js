@@ -1,6 +1,6 @@
 module.exports = {
-  'POST /api/test': {
+  'GET /api/test': {
     success: true,
-    resultData: 'It works!',
+    resultData: 'It works!!!',
   },
 }

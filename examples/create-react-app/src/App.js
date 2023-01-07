@@ -58,7 +58,7 @@ function App() {
       </div>
 
       <pre className="mt-4 border border-gray-500 bg-gray-50 p-4 text-gray-600">
-        {result}
+        {isInProgress ? 'Loading...' : result}
       </pre>
     </div>
   );

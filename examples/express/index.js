@@ -1,5 +1,5 @@
 const express = require('express');
-const { middleware } = require('../../dist/index.cjs');
+const { middleware } = require('../../dist/index');
 
 const app = express();
 

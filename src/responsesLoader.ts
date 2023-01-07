@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
 import * as chokidar from 'chokidar';
-import { debounce } from 'lodash-es';
+import debounce from 'lodash/debounce';
 import { extendedRequire } from './utils/module';
 
 export class ResponsesLoader extends EventEmitter {
