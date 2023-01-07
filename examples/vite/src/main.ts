@@ -48,6 +48,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 [
   { apiEndpoint: '/api/users', method: 'GET' },
   { apiEndpoint: '/api/test', method: 'POST' },
+  { apiEndpoint: '/foo', method: 'GET' },
+  { apiEndpoint: '/joo?a=12&b=34', method: 'GET' },
 ].forEach(({ method, apiEndpoint }, idx) => {
   const id = `button${idx}`;
   document.querySelector('#buttons')!.append(
