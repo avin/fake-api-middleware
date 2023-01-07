@@ -58,7 +58,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
 [
   { apiEndpoint: '/api/users', method: 'GET' },
-  { apiEndpoint: '/api/test', method: 'POST' },
   { apiEndpoint: '/fake-api/test-simple', method: 'POST' },
   { apiEndpoint: '/fake-api/test-simple-func?q=1', method: 'POST' },
   { apiEndpoint: '/fake-api/test-raw-func?q=2', method: 'POST' },

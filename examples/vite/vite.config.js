@@ -8,4 +8,14 @@ export default defineConfig({
       watchFiles: ['./apiMock/*'],
     }),
   ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://jsonplaceholder.typicode.com',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
 });
