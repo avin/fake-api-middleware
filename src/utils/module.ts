@@ -26,17 +26,14 @@ export const executeModule = (filePath: string, bundledCode: string) => {
     }
   };
   let config;
-  try {
-    if (_require && _require.cache) {
-      delete _require.cache[filePath];
-    }
-    const raw = _require(filePath);
-    config = raw.__esModule ? raw.default : raw;
-    if (defaultLoader) {
-      extensions[extension] = defaultLoader;
-    }
-  } catch (error) {
-    console.error(error);
+
+  if (_require && _require.cache) {
+    delete _require.cache[filePath];
+  }
+  const raw = _require(filePath);
+  config = raw.__esModule ? raw.default : raw;
+  if (defaultLoader) {
+    extensions[extension] = defaultLoader;
   }
 
   return config;
