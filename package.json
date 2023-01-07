@@ -42,7 +42,12 @@
       "src/index.ts"
     ],
     "sourcemap": false,
-    "dts": true,
+    "dts": {
+      "compilerOptions": {
+        "moduleResolution": "node",
+        "allowSyntheticDefaultImports": true
+      }
+    },
     "splitting": false,
     "clean": true,
     "format": [
@@ -51,6 +56,7 @@
     ]
   },
   "dependencies": {
+    "co-body": "^6.1.0",
     "typescript": "^4.9.4"
   }
 }

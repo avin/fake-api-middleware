@@ -25,7 +25,18 @@ const doFetch = ({
   button.disabled = true;
   setResult('');
 
-  fetch(apiEndpoint, { method })
+  fetch(apiEndpoint, {
+    method,
+
+    ...(method === 'POST'
+      ? {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ test: 123 }),
+        }
+      : {}),
+  })
     .then((response) => response.json())
     .then((data) => {
       setResult(JSON.stringify(data, null, 2));
@@ -48,8 +59,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 [
   { apiEndpoint: '/api/users', method: 'GET' },
   { apiEndpoint: '/api/test', method: 'POST' },
-  { apiEndpoint: '/foo', method: 'GET' },
-  { apiEndpoint: '/joo?a=12&b=34', method: 'GET' },
+  { apiEndpoint: '/fake-api/test-simple', method: 'POST' },
+  { apiEndpoint: '/fake-api/test-simple-func?q=1', method: 'POST' },
+  { apiEndpoint: '/fake-api/test-raw-func?q=2', method: 'POST' },
 ].forEach(({ method, apiEndpoint }, idx) => {
   const id = `button${idx}`;
   document.querySelector('#buttons')!.append(

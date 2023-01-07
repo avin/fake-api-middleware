@@ -3,7 +3,12 @@ import zlib from 'zlib';
 import { vitePlugin as fakeResponseVitePlugin } from '../../dist/index';
 
 export default defineConfig({
-  plugins: [fakeResponseVitePlugin()],
+  plugins: [
+    fakeResponseVitePlugin({
+      mocksFile: './mocks/index.ts',
+      watchFiles: ['./mocks/*'],
+    }),
+  ],
   server: {
     proxy: {
       '/api': {
