@@ -14,10 +14,12 @@ npm install fake-api-middleware
 
 ## Usage
 
-Create a file with the response-dummies. This can be either JS or TS.
+Create a file with the response-dummies. This can be either _JS_ or _TS_.
 
 `./apiDummies/index.ts`: 
 ```ts
+import type { ResponseFunctionParams } from 'fake-api-middleware';
+
 export default {
   // The response can be like a normal JS object which will be returned as JSON with status 200
   'GET /api/users': [
@@ -26,14 +28,14 @@ export default {
     {id: 3, name: 'Mike'},
   ],
   // The response can be a function that returns a JS object which will also be returned as a JSON response with code 200
-  'POST /api/createUser': ({ body, query, headers, req, res }) => {
+  'POST /api/createUser': ({ body, query, headers, req, res }: ResponseFunctionParams) => {
     return {
       success: true,
       message: `User ${body.name} created`
     };
   },
   // It is possible to change the response status code using the `res` object
-  'GET /api/unknown': ({ body, query, headers, req, res }) => {
+  'GET /api/unknown': ({ body, query, headers, req, res }: ResponseFunctionParams) => {
     res.statusCode = 404;
     return {
       success: false,
@@ -42,7 +44,7 @@ export default {
   },
   // Or he response can be as a function that prepare an HTTP response manually
   // Check for more details https://nodejs.org/api/http.html#class-httpserverresponse
-  'POST /api/processData': ({ body, query, headers, req, res }) => {
+  'POST /api/processData': ({ body, query, headers, req, res }: ResponseFunctionParams) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     return res.end(
