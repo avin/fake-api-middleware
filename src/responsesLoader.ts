@@ -20,7 +20,7 @@ export class ResponsesLoader extends EventEmitter {
 
     chokidar.watch([this.responsesFile, ...this.watchFiles]).on(
       'all',
-      debounce(async (event, path) => {
+      debounce(async () => {
         try {
           const responsesConfig = await extendedRequire(this.responsesFile);
           this.emit('update', responsesConfig);

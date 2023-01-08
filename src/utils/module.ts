@@ -15,7 +15,7 @@ export const executeModule = (filePath: string, bundledCode: string) => {
 
   // @ts-expect-error
   const extensions = module.Module._extensions;
-  let defaultLoader = extensions[extension]!;
+  const defaultLoader = extensions[extension]!;
 
   extensions[extension] = (module: NodeModule, filename: string) => {
     if (filename === filePath) {
@@ -24,13 +24,12 @@ export const executeModule = (filePath: string, bundledCode: string) => {
       defaultLoader(module, filename);
     }
   };
-  let config;
 
   if (_require && _require.cache) {
     delete _require.cache[filePath];
   }
   const raw = _require(filePath);
-  config = raw.__esModule ? raw.default : raw;
+  const config = raw.__esModule ? raw.default : raw;
   if (defaultLoader) {
     extensions[extension] = defaultLoader;
   }
