@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "description": "Express/Connect middleware to return dummy responses",
   "keywords": [
+    "middleware",
     "mock-api",
     "fake-api",
     "dummy-api",
