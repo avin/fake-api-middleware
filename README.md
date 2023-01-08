@@ -25,14 +25,23 @@ export default {
     {id: 2, name: 'Jack'},
     {id: 3, name: 'Mike'},
   ],
-  // Or as a function that returns a JS object which will also be returned as a JSON response with code 200
+  // The response can be a function that returns a JS object which will also be returned as a JSON response with code 200
   'POST /api/createUser': ({ body, query, headers, req, res }) => {
     return {
       success: true,
       message: `User ${body.name} created`
     };
   },
-  // Or as a function that prepare an HTTP response manually
+  // It is possible to change the response status code using the `res` object
+  'GET /api/unknown': ({ body, query, headers, req, res }) => {
+    res.statusCode = 404;
+    return {
+      success: false,
+      message: `Route does not exist`
+    };
+  },
+  // Or he response can be as a function that prepare an HTTP response manually
+  // Check for more details https://nodejs.org/api/http.html#class-httpserverresponse
   'POST /api/processData': ({ body, query, headers, req, res }) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
@@ -112,11 +121,11 @@ Use built-in plugin for vite in `vite.config.js`
 
 ```ts
 import { defineConfig } from 'vite';
-import { vitePlugin as fakeResponseVitePlugin } from 'fake-api-middleware';
+import { vitePlugin as fakeApiVitePlugin } from 'fake-api-middleware';
 
 export default defineConfig({
   plugins: [
-    fakeResponseVitePlugin({
+    fakeApiVitePlugin({
       responsesFile: './apiDummies/index.ts',
     }),
   ],
