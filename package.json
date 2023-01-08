@@ -9,7 +9,7 @@
     "express",
     "connect"
   ],
-  "author": "Avin Lambrero<avin.github@gmail.com>",
+  "author": "Avin Lambrero <avin.github@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -20,8 +20,8 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   },
   "files": [
