@@ -51,7 +51,7 @@ export default {
 };
 ```
 
-Setup middleware for HTTP server with the path to the stub file (this example uses Connect server, check more examples below)
+Setup middleware for HTTP server with the path to the stub file (this example uses Connect server, check more setup examples below)
 
 `./server.js`:
 ```js
