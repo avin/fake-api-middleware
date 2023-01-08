@@ -1,12 +1,13 @@
 {
-  "name": "fake-response",
-  "version": "0.0.1",
-  "description": "Mock proxy server",
+  "name": "fake-api-middleware",
+  "version": "0.1.0",
+  "description": "Express/Connect middleware to return dummy responses",
   "keywords": [
-    "mock",
-    "mock-server",
-    "proxy",
-    "fake"
+    "mock-api",
+    "fake-api",
+    "dummy-api",
+    "express",
+    "connect"
   ],
   "author": "Avin Lambrero<avin.github@gmail.com>",
   "license": "MIT",

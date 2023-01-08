@@ -1,3 +1,88 @@
-# Fake-Response
+# Fake-Api-Middleware
 
-Easily setup fake API responses for your development environment. It is Express/Connect middleware that can be used with standalone server, Webpack DevServer, Vite etc.
+[Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect) middleware. Can be used with [Webpack DevServer](https://github.com/webpack/webpack-dev-server) and [Vite](https://github.com/vitejs/vite).
+
+- 🔩 Compatible with [Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect)
+- 🛠️ Write dummy responses with JS/TS
+- 🔥 Hot dummies reload
+
+## Install
+
+```sh
+npm install fake-api-middleware
+```
+
+
+
+## Setup with Express
+
+```js
+const express = require('express');
+const { middleware: fakeApiMiddleware } = require('fake-api-middleware');
+
+const app = express();
+
+app.use(
+  fakeApiMiddleware({
+    responsesFile: './apiDummies/index.js',
+  }),
+);
+
+app.listen(8080);
+```
+
+## Setup with Vite
+
+Use built-in plugin for vite in vite.config.js
+
+```ts
+import { defineConfig } from 'vite';
+import { vitePlugin as fakeResponseVitePlugin } from '../../dist/index';
+
+export default defineConfig({
+  plugins: [
+    fakeResponseVitePlugin({
+      responsesFile: './apiDummies/index.ts',
+    }),
+  ],
+});
+```
+
+## Setup with Create-React-App
+
+Create `setupProxy.js` in `src` folder with content (`apiDummies` folder should be in project root):
+
+```js
+const { middleware: fakeApiMiddleware } = require('fake-api-middleware');
+
+module.exports = function (app) {
+  app.use(
+    fakeApiMiddleware({
+      responsesFile: './apiDummies/index.js',
+    }),
+  );
+};
+```
+
+## Setup with Webpack
+
+In webpack config create/modify `devServer` section with `before` rule:
+
+```js
+const { middleware: fakeApiMiddleware } = require('fake-api-middleware');
+
+module.exports = {
+  // ...
+  devServer: {
+    // ...
+    before(app) {
+      app.use(
+        fakeApiMiddleware({
+          responsesFile: './apiDummies/index.js',
+        }),
+      );
+    },
+  },
+  // ...
+};
+```

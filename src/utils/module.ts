@@ -2,9 +2,8 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 import * as module from 'node:module';
 import { build as esbuildBuild } from 'esbuild';
-import { createRequire } from 'node:module';
 
-const _require = createRequire(process.cwd());
+const _require = module.createRequire(process.cwd());
 
 interface NodeModuleWithCompile extends NodeModule {
   _compile(code: string, filename: string): any;
