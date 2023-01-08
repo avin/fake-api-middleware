@@ -123,7 +123,7 @@ export default defineConfig({
 });
 ```
 
-### Create-React-App
+### Create React App
 
 Create `setupProxy.js` in `src` folder with content (`apiDummies` folder should be in project root):
 
