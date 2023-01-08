@@ -12,8 +12,6 @@
 npm install fake-api-middleware
 ```
 
-
-
 ## Setup with Express
 
 ```js
@@ -33,11 +31,11 @@ app.listen(8080);
 
 ## Setup with Vite
 
-Use built-in plugin for vite in vite.config.js
+Use built-in plugin for vite in `vite.config.js`
 
 ```ts
 import { defineConfig } from 'vite';
-import { vitePlugin as fakeResponseVitePlugin } from '../../dist/index';
+import { vitePlugin as fakeResponseVitePlugin } from 'fake-api-middleware';
 
 export default defineConfig({
   plugins: [
