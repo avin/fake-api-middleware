@@ -12,7 +12,11 @@
 npm install fake-api-middleware
 ```
 
-## Setup with Express
+## Usage
+
+## Setup examples
+
+### Express
 
 ```js
 const express = require('express');
@@ -29,7 +33,7 @@ app.use(
 app.listen(8080);
 ```
 
-## Setup with Vite
+### Vite
 
 Use built-in plugin for vite in `vite.config.js`
 
@@ -46,7 +50,7 @@ export default defineConfig({
 });
 ```
 
-## Setup with Create-React-App
+### Create-React-App
 
 Create `setupProxy.js` in `src` folder with content (`apiDummies` folder should be in project root):
 
@@ -62,7 +66,7 @@ module.exports = function (app) {
 };
 ```
 
-## Setup with Webpack
+### Webpack
 
 In webpack config create/modify `devServer` section with `before` rule:
 
