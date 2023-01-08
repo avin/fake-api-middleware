@@ -1,9 +1,18 @@
+import { delay } from '../../../dist/index.mjs';
+
 export default {
   'POST /fake-api/test-simple': {
     success: true,
     resultData: 'It is simple response defined as object!!!',
   },
-  'POST /fake-api/test-simple-func': ({ body, query, headers, req, res }) => {
+  'POST /fake-api/test-simple-func': async ({
+    body,
+    query,
+    headers,
+    req,
+    res,
+  }) => {
+    await delay(250);
     return {
       success: true,
       additional: {
