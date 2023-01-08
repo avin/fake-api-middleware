@@ -60,7 +60,7 @@ export default {
 };
 ```
 
-Setup middleware for HTTP server with the path to the stub file (this example uses Connect server, check more setup examples below)
+Setup middleware for HTTP server with the path to the dummies file (this example uses Connect server, check more setup examples below)
 
 `./server.js`:
 ```js
@@ -84,8 +84,9 @@ http.createServer(app).listen(3000);
 
 Middleware options:
 
-* `responsesFile`: (`string` **required**) - Path for API dummies file;
-* `watchFiles`: (`string[]`) - Folders/Files to watch for updates to reload dummies file. By default, it only watches at single `responsesFile`;
+* `responsesFile`: (`string`) - Path for API dummies file;
+* `responses`: (`Record<string, any>`) - Pre-defined dummies object;
+* `watchFiles`: (`string[]`) - Folders/files to watch for updates to reload dummies file. By default, it only watches at single `responsesFile`;
 * `responseDelay`: (`number`) - Delay in ms for each dummy response;
 
 Dummy response function options:

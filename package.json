@@ -24,9 +24,6 @@
       "import": "./dist/index.js"
     }
   },
-  "bin": {
-    "fake-response": "./dist/cli.js"
-  },
   "files": [
     "dist"
   ],

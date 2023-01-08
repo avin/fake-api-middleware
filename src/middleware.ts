@@ -4,7 +4,16 @@ import bodyParse from 'co-body';
 import { ResponsesLoader } from './responsesLoader';
 
 export interface MiddlewareOptions {
-  responsesFile: string;
+  responses?: Record<
+    string,
+    | object
+    | string
+    | number
+    | boolean
+    | null
+    | ((p: ResponseFunctionParams) => any)
+  >;
+  responsesFile?: string;
   watchFiles?: string[];
   responseDelay?: number;
 }
@@ -18,23 +27,25 @@ export interface ResponseFunctionParams {
 }
 
 export const middleware = (middlewareOptions: MiddlewareOptions) => {
-  let responses = {};
+  let responses = { ...middlewareOptions.responses };
 
-  const responsesConfigLoader = new ResponsesLoader({
-    responsesFile: middlewareOptions.responsesFile,
-    watchFiles: middlewareOptions.watchFiles,
-  });
-  let wasErrorLastTime = false;
-  responsesConfigLoader.on('update', (newResponses) => {
-    responses = newResponses;
-    if (wasErrorLastTime) {
-      console.info('[FakeResponses]', 'Responses successfully loaded');
-    }
-  });
-  responsesConfigLoader.on('error', (err) => {
-    console.error('[FakeResponses]', err);
-    wasErrorLastTime = true;
-  });
+  if (middlewareOptions.responsesFile) {
+    const responsesConfigLoader = new ResponsesLoader({
+      responsesFile: middlewareOptions.responsesFile,
+      watchFiles: middlewareOptions.watchFiles,
+    });
+    let wasErrorLastTime = false;
+    responsesConfigLoader.on('update', (newResponses) => {
+      responses = newResponses;
+      if (wasErrorLastTime) {
+        console.info('[FakeResponses]', 'Responses successfully loaded');
+      }
+    });
+    responsesConfigLoader.on('error', (err) => {
+      console.error('[FakeResponses]', err);
+      wasErrorLastTime = true;
+    });
+  }
 
   return async (req, res, next) => {
     for (const [key, response] of Object.entries(responses)) {
