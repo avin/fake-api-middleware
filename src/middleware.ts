@@ -95,6 +95,10 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
             res,
           });
 
+          if (responseResult === undefined) {
+            return;
+          }
+
           if (responseResult instanceof ServerResponse) {
             return responseResult;
           }
