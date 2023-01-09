@@ -14,7 +14,7 @@ npm install fake-api-middleware
 
 ## Usage
 
-Create a file with the response-dummies. This can be either _JS_ or _TS_.
+Create a file with the response-dummies. It can be either _JS_ or _TS_.
 
 `./apiDummies/index.ts`: 
 ```ts
