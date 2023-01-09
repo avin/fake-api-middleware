@@ -3,7 +3,7 @@ import * as querystring from 'node:querystring';
 import bodyParse from 'co-body';
 import { ResponsesLoader } from './responsesLoader';
 import { match } from 'path-to-regexp';
-import {delay} from './helpers';
+import { delay } from './helpers';
 
 export interface MiddlewareOptions {
   responses?: Record<
@@ -45,7 +45,7 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
     return result;
   };
 
-  let preparedResponses = prepareResponses(middlewareOptions.responses);
+  let preparedResponses = prepareResponses(middlewareOptions.responses || {});
 
   if (middlewareOptions.responsesFile) {
     const responsesConfigLoader = new ResponsesLoader({
