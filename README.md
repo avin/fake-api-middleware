@@ -28,37 +28,38 @@ export default {
     {id: 2, name: 'Jack'},
     {id: 3, name: 'Mike'},
   ],
+  
   // The response can be a function that returns a JS object which will also be returned as a JSON response with code 200
   'POST /api/createUser': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     return {
-      success: true,
       message: `User ${body.name} created`
     };
   },
+  
   // It is possible to change the response status code using the `res` object
   'GET /api/unknown': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     res.statusCode = 404;
     return {
-      success: false,
       message: `Route does not exist`
     };
   },
+  
   // API path can contain special regexp syntax
   // See https://www.npmjs.com/package/path-to-regexp
   'GET /api/users/:id': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     return {
-      success: true,
       message: `User with id ${params.id} is here`
     };
   },
+  
   // It is possible to do async responses
   'GET /api/async': async ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     await delay(1000);
     return {
-      success: true,
       message: `Hello!`
     };
   },
+  
   // Or the response can be as a function that prepare an HTTP response manually
   // See https://nodejs.org/api/http.html#class-httpserverresponse
   'POST /api/processData': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
@@ -66,7 +67,6 @@ export default {
     res.setHeader('Content-Type', 'application/json');
     return res.end(
       JSON.stringify({
-        success: true,
         additional: {
           body,
           query,
