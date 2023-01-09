@@ -3,6 +3,7 @@ import * as querystring from 'node:querystring';
 import bodyParse from 'co-body';
 import { ResponsesLoader } from './responsesLoader';
 import { match } from 'path-to-regexp';
+import {delay} from './helpers';
 
 export interface MiddlewareOptions {
   responses?: Record<
@@ -76,9 +77,7 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
 
       if (matchResult && req.method === method) {
         if (middlewareOptions.responseDelay) {
-          await new Promise((r) =>
-            setTimeout(r, middlewareOptions.responseDelay),
-          );
+          await delay(middlewareOptions.responseDelay);
         }
 
         let body = {};

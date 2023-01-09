@@ -94,7 +94,8 @@ app.use(
   fakeApiMiddleware({
     responsesFile: './apiDummies/index.ts',
     watchFiles: ['./apiDummies/*'],
-    responseDelay: 250
+    responseDelay: 250,
+    enable: true,
   }),
 );
 
@@ -107,10 +108,10 @@ http.createServer(app).listen(3000);
 Middleware options:
 
 * `responsesFile`: (`string`) - Path for API dummies file;
-* `responses`: (`Record<string, any>`) - Pre-defined dummies object;
-* `watchFiles`: (`string|string[]`) - Folders/files to watch for updates to reload dummies file. By default, it only watches at single `responsesFile`;
-* `responseDelay`: (`number`) - Delay in ms for each dummy response;
-* `enable`: (`boolean`) - enable/disable middleware;
+* `responses`: (`Record<string, any>`) - Pre-defined dummies object (default - `{}`);
+* `watchFiles`: (`string|string[]`) - Folders/files to watch for updates to reload dummies file (By default, it only watches at single `responsesFile`);
+* `responseDelay`: (`number`) - Delay in ms for each dummy response (default - `0`);
+* `enable`: (`boolean`) - enable/disable middleware (default - `true`);
 
 Dummy response function options:
 
