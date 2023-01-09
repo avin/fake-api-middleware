@@ -3,7 +3,7 @@ import { delay } from '../../../dist/index.mjs';
 export default {
   'POST /fake-api/test-simple': {
     success: true,
-    resultData: 'It is simple response defined as object!!!',
+    resultData: 'It is simple response defined as object',
   },
   'POST /fake-api/test-simple-func': async ({
     body,

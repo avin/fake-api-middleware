@@ -15,7 +15,7 @@ export interface MiddlewareOptions {
     | ((p: ResponseFunctionParams) => any)
   >;
   responsesFile?: string;
-  watchFiles?: string|string[];
+  watchFiles?: string | string[];
   responseDelay?: number;
   enable?: boolean;
 }
@@ -30,7 +30,21 @@ export interface ResponseFunctionParams {
 }
 
 export const middleware = (middlewareOptions: MiddlewareOptions) => {
-  let responses = { ...middlewareOptions.responses };
+  const prepareResponses = (responses) => {
+    const result = [];
+    for (const [key, response] of Object.entries(responses)) {
+      const [method, apiPath] = key.split(' ');
+      result.push({
+        method,
+        apiPath,
+        matchUrlFn: match(apiPath, { decode: decodeURIComponent }),
+        response,
+      });
+    }
+    return result;
+  };
+
+  let preparedResponses = prepareResponses(middlewareOptions.responses);
 
   if (middlewareOptions.responsesFile) {
     const responsesConfigLoader = new ResponsesLoader({
@@ -39,7 +53,7 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
     });
     let wasErrorLastTime = false;
     responsesConfigLoader.on('update', (newResponses) => {
-      responses = newResponses;
+      preparedResponses = prepareResponses(newResponses);
       if (wasErrorLastTime) {
         console.info('[FakeResponses]', 'Responses successfully loaded');
       }
@@ -55,12 +69,10 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
       return next();
     }
 
-    for (const [key, response] of Object.entries(responses)) {
-      const [method, apiPath] = key.split(' ');
-
+    for (const { method, matchUrlFn, response } of preparedResponses) {
       const [url, queryStr] = req.url.split('?');
 
-      const matchResult = match(apiPath, { decode: decodeURIComponent })(url);
+      const matchResult = matchUrlFn(url);
 
       if (matchResult && req.method === method) {
         if (middlewareOptions.responseDelay) {

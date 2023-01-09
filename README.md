@@ -18,6 +18,7 @@ Create a file with the response-dummies. This can be either _JS_ or _TS_.
 
 `./apiDummies/index.ts`: 
 ```ts
+import { delay } from 'fake-api-middleware';
 import type { ResponseFunctionParams } from 'fake-api-middleware';
 
 export default {
@@ -42,12 +43,20 @@ export default {
       message: `Route does not exist`
     };
   },
-  // API path can contain regexp. 
-  // Check https://www.npmjs.com/package/path-to-regexp
+  // API path can contain special regexp syntax
+  // See https://www.npmjs.com/package/path-to-regexp
   'GET /api/users/:id': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     return {
       success: true,
       message: `User with id ${params.id} is here`
+    };
+  },
+  // It is possible to do async responses
+  'GET /api/async': async ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
+    await delay(1000);
+    return {
+      success: true,
+      message: `Hello!`
     };
   },
   // Or he response can be as a function that prepare an HTTP response manually
