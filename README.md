@@ -59,8 +59,8 @@ export default {
       message: `Hello!`
     };
   },
-  // Or he response can be as a function that prepare an HTTP response manually
-  // Check for more details https://nodejs.org/api/http.html#class-httpserverresponse
+  // Or the response can be as a function that prepare an HTTP response manually
+  // See https://nodejs.org/api/http.html#class-httpserverresponse
   'POST /api/processData': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
