@@ -2,6 +2,7 @@ import { IncomingMessage, ServerResponse } from 'node:http';
 import * as querystring from 'node:querystring';
 import bodyParse from 'co-body';
 import { ResponsesLoader } from './responsesLoader';
+import { match } from 'path-to-regexp';
 
 export interface MiddlewareOptions {
   responses?: Record<
@@ -22,6 +23,7 @@ export interface ResponseFunctionParams {
   body: Record<string, any>;
   query: Record<string, any>;
   headers: Record<string, any>;
+  params: Record<string, any>;
   req: IncomingMessage;
   res: ServerResponse;
 }
@@ -53,7 +55,9 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
 
       const [url, queryStr] = req.url.split('?');
 
-      if (url === apiPath && req.method === method) {
+      const matchResult = match(apiPath, { decode: decodeURIComponent })(url);
+
+      if (matchResult && req.method === method) {
         if (middlewareOptions.responseDelay) {
           await new Promise((r) =>
             setTimeout(r, middlewareOptions.responseDelay),
@@ -70,6 +74,7 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
             body,
             query: querystring.parse(queryStr),
             headers: req.headers,
+            params: matchResult.params,
             req,
             res,
           });

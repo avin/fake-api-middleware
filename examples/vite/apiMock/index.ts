@@ -9,6 +9,7 @@ export default {
     body,
     query,
     headers,
+    params,
     req,
     res,
   }) => {
@@ -19,11 +20,19 @@ export default {
         body,
         query,
         headers,
+        params,
       },
       resultData: 'It is response made as simple return',
     };
   },
-  'POST /fake-api/test-raw-func': ({ body, query, headers, req, res }) => {
+  'POST /fake-api/test-raw-func': ({
+    body,
+    query,
+    headers,
+    params,
+    req,
+    res,
+  }) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     return res.end(
@@ -33,9 +42,30 @@ export default {
           body,
           query,
           headers,
+          params,
         },
         resultData: 'It is response made with ServerResponse',
       }),
     );
+  },
+  'GET /fake-api/params/:id': async ({
+    body,
+    query,
+    headers,
+    params,
+    req,
+    res,
+  }) => {
+    await delay(250);
+    return {
+      success: true,
+      additional: {
+        body,
+        query,
+        headers,
+        params,
+      },
+      resultData: 'This url includes regexp',
+    };
   },
 };
