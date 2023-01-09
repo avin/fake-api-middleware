@@ -107,20 +107,20 @@ http.createServer(app).listen(3000);
 
 Middleware options:
 
-* `responsesFile`: (`string`) - Path for API dummies file;
-* `responses`: (`Record<string, any>`) - Pre-defined dummies object (default - `{}`);
-* `watchFiles`: (`string|string[]`) - Folders/files to watch for updates to reload dummies file (By default, it only watches at single `responsesFile`);
-* `responseDelay`: (`number`) - Delay in ms for each dummy response (default - `0`);
-* `enable`: (`boolean`) - enable/disable middleware (default - `true`);
+* `responsesFile`: `string` - Path for API dummies file;
+* `responses`: `Record<string, any>` - Pre-defined dummies object (default - `{}`);
+* `watchFiles`: `string|string[]` - Folders/files to watch for updates to reload dummies file (By default, it only watches at single `responsesFile`);
+* `responseDelay`: `number` - Delay in ms for each dummy response (default - `0`);
+* `enable`: `boolean` - enable/disable middleware (default - `true`);
 
 Dummy response function options:
 
-* `body`: (`Record<string, any>`) - Object with parsed body from request;
-* `query`: (`Record<string, any>`) - Object with parsed query params of requested url;
-* `headers`: (`Record<string, any>`) - Object with request headers;
-* `params`: (`Record<string, any>`) - Object with URL regexp values;
-* `req`: (`IncomingMessage`) - Raw Node.JS HTTP [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage) object;
-* `res`: (`ServerResponse`) - Raw Node.JS HTTP [ServerResponse](https://nodejs.org/api/http.html#class-httpserverresponse) object;
+* `body`: `Record<string, any>` - Object with parsed body from request;
+* `query`: `Record<string, any>` - Object with parsed query params of requested url;
+* `headers`: `Record<string, any>` - Object with request headers;
+* `params`: `Record<string, any>` - Object with URL regexp values;
+* `req`: `IncomingMessage` - Raw Node.JS HTTP [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage) object;
+* `res`: `ServerResponse` - Raw Node.JS HTTP [ServerResponse](https://nodejs.org/api/http.html#class-httpserverresponse) object;
 
 ## Setup examples
 
