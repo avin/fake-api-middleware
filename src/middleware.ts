@@ -15,8 +15,9 @@ export interface MiddlewareOptions {
     | ((p: ResponseFunctionParams) => any)
   >;
   responsesFile?: string;
-  watchFiles?: string[];
+  watchFiles?: string|string[];
   responseDelay?: number;
+  enable?: boolean;
 }
 
 export interface ResponseFunctionParams {
@@ -50,6 +51,10 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
   }
 
   return async (req, res, next) => {
+    if (middlewareOptions.enable !== undefined && !middlewareOptions.enable) {
+      return next();
+    }
+
     for (const [key, response] of Object.entries(responses)) {
       const [method, apiPath] = key.split(' ');
 
