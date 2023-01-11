@@ -2,6 +2,8 @@ import { IncomingMessage, ServerResponse } from 'node:http';
 import * as querystring from 'node:querystring';
 import bodyParse from 'co-body';
 import { ResponsesLoader } from './responsesLoader';
+import { match } from 'path-to-regexp';
+import { delay } from './helpers';
 
 export interface MiddlewareOptions {
   responses?: Record<
@@ -14,20 +16,36 @@ export interface MiddlewareOptions {
     | ((p: ResponseFunctionParams) => any)
   >;
   responsesFile?: string;
-  watchFiles?: string[];
+  watchFiles?: string | string[];
   responseDelay?: number;
+  enable?: boolean;
 }
 
 export interface ResponseFunctionParams {
   body: Record<string, any>;
   query: Record<string, any>;
   headers: Record<string, any>;
+  params: Record<string, any>;
   req: IncomingMessage;
   res: ServerResponse;
 }
 
 export const middleware = (middlewareOptions: MiddlewareOptions) => {
-  let responses = { ...middlewareOptions.responses };
+  const prepareResponses = (responses) => {
+    const result = [];
+    for (const [key, response] of Object.entries(responses)) {
+      const [method, apiPath] = key.split(' ');
+      result.push({
+        method,
+        apiPath,
+        matchUrlFn: match(apiPath, { decode: decodeURIComponent }),
+        response,
+      });
+    }
+    return result;
+  };
+
+  let preparedResponses = prepareResponses(middlewareOptions.responses || {});
 
   if (middlewareOptions.responsesFile) {
     const responsesConfigLoader = new ResponsesLoader({
@@ -36,7 +54,7 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
     });
     let wasErrorLastTime = false;
     responsesConfigLoader.on('update', (newResponses) => {
-      responses = newResponses;
+      preparedResponses = prepareResponses(newResponses);
       if (wasErrorLastTime) {
         console.info('[FakeResponses]', 'Responses successfully loaded');
       }
@@ -48,16 +66,18 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
   }
 
   return async (req, res, next) => {
-    for (const [key, response] of Object.entries(responses)) {
-      const [method, apiPath] = key.split(' ');
+    if (middlewareOptions.enable !== undefined && !middlewareOptions.enable) {
+      return next();
+    }
 
+    for (const { method, matchUrlFn, response } of preparedResponses) {
       const [url, queryStr] = req.url.split('?');
 
-      if (url === apiPath && req.method === method) {
+      const matchResult = matchUrlFn(url);
+
+      if (matchResult && req.method === method) {
         if (middlewareOptions.responseDelay) {
-          await new Promise((r) =>
-            setTimeout(r, middlewareOptions.responseDelay),
-          );
+          await delay(middlewareOptions.responseDelay);
         }
 
         let body = {};
@@ -70,9 +90,14 @@ export const middleware = (middlewareOptions: MiddlewareOptions) => {
             body,
             query: querystring.parse(queryStr),
             headers: req.headers,
+            params: matchResult.params,
             req,
             res,
           });
+
+          if (responseResult === undefined) {
+            return;
+          }
 
           if (responseResult instanceof ServerResponse) {
             return responseResult;

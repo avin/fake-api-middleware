@@ -14,10 +14,11 @@ npm install fake-api-middleware
 
 ## Usage
 
-Create a file with the response-dummies. This can be either _JS_ or _TS_.
+Create a file with the response-dummies. It can be either _JS_ or _TS_.
 
 `./apiDummies/index.ts`: 
 ```ts
+import { delay } from 'fake-api-middleware';
 import type { ResponseFunctionParams } from 'fake-api-middleware';
 
 export default {
@@ -27,33 +28,50 @@ export default {
     {id: 2, name: 'Jack'},
     {id: 3, name: 'Mike'},
   ],
+  
   // The response can be a function that returns a JS object which will also be returned as a JSON response with code 200
-  'POST /api/createUser': ({ body, query, headers, req, res }: ResponseFunctionParams) => {
+  'POST /api/createUser': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     return {
-      success: true,
       message: `User ${body.name} created`
     };
   },
+  
   // It is possible to change the response status code using the `res` object
-  'GET /api/unknown': ({ body, query, headers, req, res }: ResponseFunctionParams) => {
+  'GET /api/unknown': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     res.statusCode = 404;
     return {
-      success: false,
       message: `Route does not exist`
     };
   },
-  // Or he response can be as a function that prepare an HTTP response manually
-  // Check for more details https://nodejs.org/api/http.html#class-httpserverresponse
-  'POST /api/processData': ({ body, query, headers, req, res }: ResponseFunctionParams) => {
+  
+  // API path can contain special regexp syntax
+  // See https://www.npmjs.com/package/path-to-regexp
+  'GET /api/users/:id': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
+    return {
+      message: `User with id ${params.id} is here`
+    };
+  },
+  
+  // It is possible to do async responses
+  'GET /api/async': async ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
+    await delay(1000);
+    return {
+      message: `Hello!`
+    };
+  },
+  
+  // Or the response can be as a function that prepare an HTTP response manually
+  // See https://nodejs.org/api/http.html#class-httpserverresponse
+  'POST /api/processData': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
     return res.end(
       JSON.stringify({
-        success: true,
         additional: {
           body,
           query,
           headers,
+          params
         },
         message: 'It is response made with ServerResponse',
       }),
@@ -75,6 +93,9 @@ var app = connect();
 app.use(
   fakeApiMiddleware({
     responsesFile: './apiDummies/index.ts',
+    watchFiles: ['./apiDummies/*'],
+    responseDelay: 250,
+    enable: true,
   }),
 );
 
@@ -86,16 +107,18 @@ http.createServer(app).listen(3000);
 
 Middleware options:
 
-* `responsesFile`: (`string`) - Path for API dummies file;
-* `responses`: (`Record<string, any>`) - Pre-defined dummies object;
-* `watchFiles`: (`string[]`) - Folders/files to watch for updates to reload dummies file. By default, it only watches at single `responsesFile`;
-* `responseDelay`: (`number`) - Delay in ms for each dummy response;
+* `responsesFile`: `string` - Path for API dummies file;
+* `responses`: `Record<string, any>` - Pre-defined dummies object (default - `{}`);
+* `watchFiles`: `string|string[]` - Folders/files to watch for updates to reload dummies file (By default, it only watches at single `responsesFile`);
+* `responseDelay`: `number` - Delay in ms for each dummy response (default - `0`);
+* `enable`: `boolean` - enable/disable middleware (default - `true`);
 
 Dummy response function options:
 
 * `body`: `Record<string, any>` - Object with parsed body from request;
 * `query`: `Record<string, any>` - Object with parsed query params of requested url;
 * `headers`: `Record<string, any>` - Object with request headers;
+* `params`: `Record<string, any>` - Object with URL regexp values;
 * `req`: `IncomingMessage` - Raw Node.JS HTTP [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage) object;
 * `res`: `ServerResponse` - Raw Node.JS HTTP [ServerResponse](https://nodejs.org/api/http.html#class-httpserverresponse) object;
 

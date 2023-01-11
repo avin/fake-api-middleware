@@ -1,14 +1,17 @@
 {
   "name": "fake-api-middleware",
   "version": "0.1.1",
-  "description": "Express/Connect middleware to return dummy responses",
+  "description": "Express/Connect middleware for dummy responses",
   "keywords": [
     "middleware",
     "mock-api",
     "fake-api",
     "dummy-api",
+    "mock",
     "express",
-    "connect"
+    "connect",
+    "webpack",
+    "vite"
   ],
   "author": "Avin Lambrero <avin.github@gmail.com>",
   "license": "MIT",
@@ -37,7 +40,8 @@
     "chokidar": "^3.5.3",
     "co-body": "^6.1.0",
     "esbuild": "^0.16.15",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "path-to-regexp": "^6.2.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.18",

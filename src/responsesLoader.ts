@@ -1,7 +1,8 @@
 import { EventEmitter } from 'node:events';
 import * as chokidar from 'chokidar';
 import debounce from 'lodash/debounce';
-import { extendedRequire } from './utils/module';
+import { extendedRequire } from './module';
+import isString from 'lodash/isString';
 
 export class ResponsesLoader extends EventEmitter {
   protected responsesFile: string;
@@ -11,12 +12,16 @@ export class ResponsesLoader extends EventEmitter {
     watchFiles,
   }: {
     responsesFile: string;
-    watchFiles: string[] | undefined;
+    watchFiles: string | string[] | undefined;
   }) {
     super();
 
     this.responsesFile = responsesFile;
-    this.watchFiles = watchFiles || [];
+
+    if (isString(watchFiles)) {
+      watchFiles = [watchFiles as string];
+    }
+    this.watchFiles = (watchFiles as string[] | undefined) || [];
 
     chokidar.watch([this.responsesFile, ...this.watchFiles]).on(
       'all',

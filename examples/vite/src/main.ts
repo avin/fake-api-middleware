@@ -3,7 +3,7 @@ import './style.css';
 const makeButton = ({ content, id }: { content: string; id: string }) => {
   const button = document.createElement('button');
   button.className =
-    'rounded-md px-4 py-2 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-50';
+    'rounded-md text-sm px-4 py-2 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-50';
   button.id = id;
   button.innerHTML = content;
   return button;
@@ -61,6 +61,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   { apiEndpoint: '/fake-api/test-simple', method: 'POST' },
   { apiEndpoint: '/fake-api/test-simple-func?q=1', method: 'POST' },
   { apiEndpoint: '/fake-api/test-raw-func?q=2', method: 'POST' },
+  { apiEndpoint: '/fake-api/params/123?q=2', method: 'GET' },
 ].forEach(({ method, apiEndpoint }, idx) => {
   const id = `button${idx}`;
   document.querySelector('#buttons')!.append(
