@@ -1,6 +1,6 @@
 {
   "name": "fake-api-middleware",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Express/Connect middleware for dummy responses",
   "keywords": [
     "middleware",
