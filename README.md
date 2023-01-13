@@ -23,6 +23,11 @@ import type { ResponseFunctionParams } from 'fake-api-middleware';
 
 export default {
   // The response can be like a normal JS object which will be returned as JSON with status 200
+  'POST /test': {
+    foo: 'bar'
+  },
+  
+  // The response can be an object, array, string, number or null
   'GET /api/users': [
     {id: 1, name: 'Bob'},
     {id: 2, name: 'Jack'},
