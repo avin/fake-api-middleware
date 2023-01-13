@@ -32,7 +32,7 @@ export class ResponsesLoader extends EventEmitter {
         } catch (e) {
           this.emit('error', e);
         }
-      }, 300),
+      }, 100),
     );
   }
 }
