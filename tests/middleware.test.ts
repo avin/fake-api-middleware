@@ -15,7 +15,7 @@ describe('general middleware', () => {
       middleware({
         responses: {
           'GET /test': {
-            message: 'Hello',
+            message: 'Hello1',
           },
         },
       }),
