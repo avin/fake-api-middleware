@@ -34,8 +34,9 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "prepublishOnly": "npm run build",
-    "test": "vitest"
+    "prepublishOnly": "npm run build && npm run test",
+    "test": "vitest --run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "chokidar": "^3.5.3",
