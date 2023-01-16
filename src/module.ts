@@ -37,44 +37,32 @@ export const executeModule = (filePath: string, bundledCode: string) => {
   return config;
 };
 
-const esbuildCache: Record<string, { time: number; text: string }> = {};
-
 export const extendedRequire = async <T>(filePath: string): Promise<T> => {
   const pkg = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'),
   );
 
   const srcCode = await (async () => {
-    const stats = fs.statSync(filePath);
-    const time = stats.mtime.getTime();
+    const result = await esbuildBuild({
+      entryPoints: [filePath],
+      outfile: 'out.js',
+      write: false,
+      platform: 'node',
+      bundle: true,
+      format: 'cjs',
+      metafile: true,
+      target: 'es2015',
+      external: [
+        'esbuild',
+        ...Object.keys(pkg.dependencies || {}),
+        ...Object.keys(pkg.devDependencies || {}),
+        ...Object.keys(pkg.peerDependencies || {}),
+      ],
+      logLevel: 'silent',
+    });
+    const { text } = result.outputFiles[0];
 
-    if (!esbuildCache[filePath] || time !== esbuildCache[filePath].time) {
-      const result = await esbuildBuild({
-        entryPoints: [filePath],
-        outfile: 'out.js',
-        write: false,
-        platform: 'node',
-        bundle: true,
-        format: 'cjs',
-        metafile: true,
-        target: 'es2015',
-        external: [
-          'esbuild',
-          ...Object.keys(pkg.dependencies || {}),
-          ...Object.keys(pkg.devDependencies || {}),
-          ...Object.keys(pkg.peerDependencies || {}),
-        ],
-        logLevel: 'silent',
-      });
-      const { text } = result.outputFiles[0];
-
-      esbuildCache[filePath] = {
-        text,
-        time,
-      };
-    }
-
-    return esbuildCache[filePath].text;
+    return text;
   })();
 
   return (await executeModule(filePath, srcCode)) as T;
