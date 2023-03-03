@@ -1,6 +1,6 @@
 # Fake-Api-Middleware
 
-[Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect) middleware. Can be used with [Vite](https://github.com/vitejs/vite), [Webpack DevServer](https://github.com/webpack/webpack-dev-server), [CreateReactApp](https://github.com/facebook/create-react-app) and many more that based on NodeJS Connect/Express server.
+[Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect) middleware for mocking API responses. Can be used with [Vite](https://github.com/vitejs/vite), [Webpack DevServer](https://github.com/webpack/webpack-dev-server), [CreateReactApp](https://github.com/facebook/create-react-app) and many more that based on NodeJS Connect/Express server.
 
 - 🔩 Compatible with [Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect)
 - 🛠️ Write dummy responses with JS/TS
