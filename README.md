@@ -1,10 +1,10 @@
 # Fake-Api-Middleware
 
-[Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect) middleware for mocking API responses. Can be used with [Vite](https://github.com/vitejs/vite), [Webpack DevServer](https://github.com/webpack/webpack-dev-server), [CreateReactApp](https://github.com/facebook/create-react-app) and many more that based on NodeJS Connect/Express server.
+This is an [Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect) middleware for mocking API responses. It can be used with [Vite](https://github.com/vitejs/vite), [Webpack DevServer](https://github.com/webpack/webpack-dev-server), [CreateReactApp](https://github.com/facebook/create-react-app), and many other frameworks that are based on the NodeJS Connect/Express server.
 
 - 🔩 Compatible with [Express](https://github.com/expressjs/express)+[Connect](https://github.com/senchalabs/connect)
-- 🛠️ Write dummy responses with JS/TS
-- 🔥 Hot dummies reload
+- 🛠️ Write dummy responses with JavaScript/TypeScript
+- 🔥 Hot reloading of dummy responses
 
 ## Install
 
@@ -14,7 +14,7 @@ npm install fake-api-middleware
 
 ## Usage
 
-Create a file with the response-dummies. It can be either _JS_ or _TS_.
+Create a file for storing response dummies. The file can be either in _JavaScript_ or _TypeScript_.
 
 `./apiDummies/index.ts`: 
 ```ts
@@ -22,7 +22,7 @@ import { delay } from 'fake-api-middleware';
 import type { ResponseFunctionParams } from 'fake-api-middleware';
 
 export default {
-  // The response can be like a normal JS object which will be returned as JSON with status 200
+  // The response can be in the form of a normal JavaScript object, which will be returned as JSON with a status code of 200
   'POST /test': {
     foo: 'bar'
   },
@@ -34,7 +34,7 @@ export default {
     {id: 3, name: 'Mike'},
   ],
   
-  // The response can be a function that returns a JS object which will also be returned as a JSON response with code 200
+  // The response can also be a function that returns a JavaScript object, which will be returned as a JSON response with a status code of 200
   'POST /api/createUser': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     return {
       message: `User ${body.name} created`
@@ -49,15 +49,15 @@ export default {
     };
   },
   
-  // API path can contain special regexp syntax
-  // See https://www.npmjs.com/package/path-to-regexp
+  // The API path can contain special regular expression syntax. 
+  // For more information, please see https://www.npmjs.com/package/path-to-regexp
   'GET /api/users/:id': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     return {
       message: `User with id ${params.id} is here`
     };
   },
   
-  // It is possible to do async responses
+  // It is possible to use asynchronous response functions
   'GET /api/async': async ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     await delay(1000);
     return {
@@ -65,8 +65,8 @@ export default {
     };
   },
   
-  // Or the response can be as a function that prepare an HTTP response manually
-  // See https://nodejs.org/api/http.html#class-httpserverresponse
+  // Alternatively, the response can be a function that manually prepares an HTTP response. 
+  // For more information, please see https://nodejs.org/api/http.html#class-httpserverresponse
   'POST /api/processData': ({ body, query, headers, params, req, res }: ResponseFunctionParams) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
@@ -85,7 +85,7 @@ export default {
 };
 ```
 
-Setup middleware for HTTP server with the path to the dummies file (this example uses Connect server, check more setup examples below)
+Set up the middleware for the HTTP server with the path to the file containing the response dummies. The following example demonstrates using the Connect server, but please check the setup examples below for more options.
 
 `./server.js`:
 ```js
@@ -110,7 +110,7 @@ http.createServer(app).listen(3000);
 
 ## API
 
-Middleware options:
+Options for the middleware:
 
 * `responsesFile`: `string` - Path for API dummies file;
 * `responses`: `Record<string, any>` - Pre-defined dummies object (default - `{}`);
@@ -118,7 +118,7 @@ Middleware options:
 * `responseDelay`: `number` - Delay in ms for each dummy response (default - `0`);
 * `enable`: `boolean` - enable/disable middleware (default - `true`);
 
-Dummy response function options:
+Options for the dummy response function:
 
 * `body`: `Record<string, any>` - Object with parsed body from request;
 * `query`: `Record<string, any>` - Object with parsed query params of requested url;
@@ -127,7 +127,7 @@ Dummy response function options:
 * `req`: `IncomingMessage` - Raw Node.JS HTTP [IncomingMessage](https://nodejs.org/api/http.html#class-httpincomingmessage) object;
 * `res`: `ServerResponse` - Raw Node.JS HTTP [ServerResponse](https://nodejs.org/api/http.html#class-httpserverresponse) object;
 
-## Setup examples
+## Examples of how to set up the middleware
 
 ### Express
 
@@ -148,7 +148,7 @@ app.listen(8080);
 
 ### Vite
 
-Use built-in plugin for vite in `vite.config.js`
+Use the built-in plugin for vite in the `vite.config.js` file:
 
 ```ts
 import { defineConfig } from 'vite';
@@ -165,7 +165,7 @@ export default defineConfig({
 
 ### Create React App
 
-Create `setupProxy.js` in `src` folder with content (`apiDummies` folder should be in project root):
+Create `setupProxy.js` file in the `src` folder with the following content (note that the `apiDummies` folder should be in the root of the project):
 
 ```js
 const { middleware: fakeApiMiddleware } = require('fake-api-middleware');
@@ -181,7 +181,7 @@ module.exports = function (app) {
 
 ### Webpack
 
-In webpack config create/modify `devServer` section with `before` rule:
+To set up the middleware in a webpack configuration, create or modify the `devServer` section and add a `before` rule:
 
 ```js
 const { middleware: fakeApiMiddleware } = require('fake-api-middleware');
