@@ -98,7 +98,7 @@ var app = connect();
 app.use(
   fakeApiMiddleware({
     responsesFile: './apiDummies/index.ts',
-    watchFiles: ['./apiDummies/*'],
+    watchFiles: ['./apiDummies/**/*'],
     responseDelay: 250,
     enable: true,
   }),
