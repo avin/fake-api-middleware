@@ -17,7 +17,9 @@ export const debounce = <T extends (...args: any[]) => any>(
   return (...args: Parameters<T>) => {
     const later = () => {
       timeout = null;
-      if (!immediate) func.apply(this, args);
+      if (!immediate) {
+        func.apply(this, args);
+      }
     };
     const callNow = immediate && !timeout;
     if (timeout) {
