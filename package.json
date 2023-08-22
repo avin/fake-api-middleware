@@ -1,6 +1,6 @@
 {
   "name": "fake-api-middleware",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Express/Connect middleware for dummy responses",
   "keywords": [
     "middleware",
@@ -42,7 +42,6 @@
     "chokidar": "^3.5.3",
     "co-body": "^6.1.0",
     "esbuild": "^0.16.15",
-    "lodash-es": "^4.17.21",
     "path-to-regexp": "^6.2.1"
   },
   "devDependencies": {
