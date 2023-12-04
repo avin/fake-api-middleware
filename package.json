@@ -1,6 +1,6 @@
 {
   "name": "fake-api-middleware",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Express/Connect middleware for dummy responses",
   "keywords": [
     "middleware",
@@ -25,7 +25,8 @@
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
     }
   },
   "files": [
